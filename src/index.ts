@@ -33,10 +33,12 @@ const createMcpHandler = async (c: any) => {
     async ({ source, count, page }) => {
       let instances: Instance[] = []
       try {
-        instances = JSON.parse(c.env.JIBUN_INSTANCES)
-      } catch (e) {
+        const envStr = c.env?.JIBUN_INSTANCES || (typeof process !== 'undefined' ? (process as any).env?.JIBUN_INSTANCES : undefined) || '[]'
+        instances = JSON.parse(envStr)
+      } catch (e: any) {
+        const envStr = c.env?.JIBUN_INSTANCES || (typeof process !== 'undefined' ? (process as any).env?.JIBUN_INSTANCES : undefined)
         return {
-          content: [{ type: 'text', text: 'Error: Failed to parse JIBUN_INSTANCES configuration.' }],
+          content: [{ type: 'text', text: `Error: Failed to parse JIBUN_INSTANCES configuration. Error: ${e.message}. Raw value: ${envStr}` }],
           isError: true,
         }
       }
@@ -118,17 +120,21 @@ Images: ${item.images?.map((img: any) => img.image_url).join(', ') || 'None'}
     }
   )
 
-  mcpServer.tool(
+  mcpServer.registerTool(
     'list_jibun_sources',
-    'List all configured Jibun instances',
-    {},
+    {
+      description: 'List all configured Jibun instances',
+      inputSchema: {},
+    },
     async () => {
         let instances: Instance[] = []
         try {
-          instances = JSON.parse(c.env.JIBUN_INSTANCES)
-        } catch (e) {
+          const envStr = c.env?.JIBUN_INSTANCES || (typeof process !== 'undefined' ? (process as any).env?.JIBUN_INSTANCES : undefined) || '[]'
+          instances = JSON.parse(envStr)
+        } catch (e: any) {
+          const envStr = c.env?.JIBUN_INSTANCES || (typeof process !== 'undefined' ? (process as any).env?.JIBUN_INSTANCES : undefined)
           return {
-            content: [{ type: 'text', text: 'Error: Failed to parse JIBUN_INSTANCES configuration.' }],
+            content: [{ type: 'text', text: `Error: Failed to parse JIBUN_INSTANCES configuration. Error: ${e.message}. Raw value: ${envStr}` }],
             isError: true,
           }
         }
