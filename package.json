@@ -1,0 +1,21 @@
+{
+  "name": "mcp-jibun",
+  "description": "MCP server for Jibun (and Ech0) instances",
+  "type": "module",
+  "license": "MIT",
+  "author": "Elecmonkey <elecmonkey@hotmail.com>",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "@hono/mcp": "^0.2.3",
+    "@modelcontextprotocol/sdk": "^1.25.2",
+    "hono": "^4.11.3",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.4.0"
+  }
+}
